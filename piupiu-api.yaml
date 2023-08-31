@@ -1,0 +1,505 @@
+openapi: 3.1.0
+info:
+  title: Raro Academy - Piupiu API
+  description: |-
+  version: '0.1'
+externalDocs:
+  description: Conheça o piupiu
+  url: 'https://piupiu-web.vercel.app/'
+servers:
+  - url: https://piupiu-api.onrender.com
+tags:
+  - name: Auth
+    description: Operations about authentication
+  - name: User
+    description: Operations about user
+  - name: Pius
+    description: Everything about Pius
+
+paths:
+  /pius:
+    get:
+      tags:
+        - Pius
+      summary: Get pius
+      description: Get pius
+      operationId: getPius
+      parameters:
+        - name: handle
+          in: query
+          description: 'The user handle whose posts need to be fetched'
+          required: false
+          schema:
+            type: string 
+        - name: page
+          in: query
+          description: 'Page number'
+          required: false
+          schema:
+            type: number
+        - name: per_page
+          in: query
+          description: 'Items per page'
+          required: false
+          schema:
+            type: number                     
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Piu'
+            application/xml:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Piu'
+      security:
+        - bearerAuth: []
+  /posts:
+    post:
+      tags:
+        - Pius
+      summary: Creates new piu
+      description: Creates new piu given a message
+      operationId: postPiu 
+      requestBody:
+        description: New post object
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Piu'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Piu'
+      security:
+        - bearerAuth: []
+  /posts/{postId}:
+    get:
+      tags:
+        - Pius
+      summary: Finds post by id
+      description: Gets the post that matches given id
+      operationId: findByPostId
+      parameters:
+        - name: postId
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Piu'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Piu'
+      security:
+        - bearerAuth: []
+  /posts/{postId}/like:
+    post:
+      tags:
+        - Pius
+      summary: Finds post by id
+      description: Gets the post that matches given id
+      operationId: likePost
+      parameters:
+        - name: handle
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Piu'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Piu'
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Pius
+      summary: Finds post by id
+      description: Gets the post that matches given id
+      operationId: deleteLike
+      parameters:
+        - name: handle
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Piu'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Piu'
+      security:
+        - bearerAuth: []          
+  /posts/{postId}/likes:
+    get:
+      tags:
+        - Pius
+      summary: Finds post by id
+      description: Gets the post that matches given id
+      operationId: postLikes
+      parameters:
+        - name: handle
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Piu'
+      security:
+        - bearerAuth: []
+  /posts/{postId}/reply:
+    post:
+      tags:
+        - Pius
+      summary: Finds post by id
+      description: Gets the post that matches given id
+      operationId: replyToPost
+      parameters:
+        - name: handle
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string      
+      requestBody:
+        description: New post object
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Piu'
+      security:
+        - bearerAuth: []
+  /posts/{postId}/replies:
+    get:
+      tags:
+        - Pius
+      summary: Finds replies by main postID
+      description: Gets all replies to a given post
+      operationId: getPostReplies
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+      security:
+        - bearerAuth: []                                 
+  /signup:
+    post:
+      tags:
+        - Auth
+      summary: Create user
+      description: Creates a new user account
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                handle: 
+                  type: string
+                password:
+                  type: string
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+  /login:
+    post:
+      tags:
+        - Auth
+      summary: Logs user into the system
+      description: ''
+      operationId: loginUser
+      requestBody:
+        description: User object
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                handle: 
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  exp: 
+                    type: string
+                    format: date-time
+                  user:
+                   $ref: '#/components/schemas/User'  
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  exp: 
+                    type: string
+                    format: date
+
+        '400':
+          description: Invalid username/password supplied                
+  /user/{handle}:
+    get:
+      tags:
+        - User
+      summary: Get user by user name
+      description: ''
+      operationId: getUserByName
+      parameters:
+        - name: handle
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    patch:
+      tags:
+        - User
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      parameters:
+        - name: handle
+          in: path
+          description: name that need to be deleted
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+  /user/{handle}/posts:
+    get:
+      tags:
+        - User
+      summary: Gets all posts from a user
+      description: Creates list of users with given input array
+      operationId: postsFromUser
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Piu'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Piu'
+        default:
+          description: successful operation
+  /user/{handle}/likes:
+    get:
+      tags:
+        - User
+      summary: Gets all posts from a user
+      description: Get all liked posts from a user
+      operationId: likesFromUser
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Piu'
+        default:
+          description: successful operation                    
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: string
+          examples: [10]
+        handle:
+          type: string
+          format: srting
+          examples: [198772]
+        image_url:
+          type: string
+          format: string
+          examples: [7]
+        verified:
+          type: boolean
+        description:
+          type: string
+      xml:
+        name: order
+    Piu:
+      type: object
+      properties:
+        id:
+          type: string
+          format: string
+          examples: [10]
+        author: 
+          $ref: '#/components/schemas/User'
+      xml:
+        name: order
+
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
