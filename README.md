@@ -26,3 +26,5 @@
     - Os dados das páginas de usuários NÃO serão paginados
   - As páginas dos pius ( posts ) deverão exibir as informações relativas ao post especificado pelo id na rota e TODAS as suas respostas
     - As respostas NÃO serão paginadas
+
+
