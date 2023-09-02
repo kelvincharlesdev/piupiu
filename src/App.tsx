@@ -1,7 +1,13 @@
 import "./App.css";
+import { PiupiuRoutes } from "./routes/PiupiuRoutes";
+
+
 
 function App() {
-  return <h1>Hello world</h1>;
+  return (
+
+    <PiupiuRoutes/>
+  )
 }
 
 export default App;
