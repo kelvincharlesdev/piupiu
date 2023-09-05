@@ -1,13 +1,20 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { User } from "../../types/Users";
 
- interface IAuthLogin {
- 
+import '../../types/Users'
+
+
+interface IAuthLogin {
   isAuthenticated: boolean;
-  setIsAuthenticated: (isAuthenticated : boolean) => void
-  isLoading: boolean
-  setIsLoading: (isLoading : boolean) => void;
-
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+  user?: User
+  setUser: (user: User) => void
 }
+
+
+
 
 export const AuthContext = createContext({} as IAuthLogin);
 
@@ -17,22 +24,30 @@ export const AuthContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-   
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    const tokenUser = localStorage.getItem("userPiu");
-
+    const tokenUser = localStorage.getItem("token");
+    const userData = localStorage.getItem('user')
+   
     if (tokenUser) {
       setIsAuthenticated(true);
+      
     } else {
-        setIsAuthenticated(false);
+      setIsAuthenticated(false);
     }
 
-  },  []);
+    if(userData) {
+      setUser(JSON.parse(userData))
+    }
+    
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated , isLoading, setIsLoading }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, setIsAuthenticated, isLoading, setIsLoading , user, setUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

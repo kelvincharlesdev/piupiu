@@ -34,3 +34,8 @@
 ## Configurações de Api
 
 - Configurado post em api quando o usuario entra com senha e email corretamente 
+
+## Home 
+
+- SideBar :  SessionController {Busquei os dados do usuario tais como img, handle e foto e setei parar aparecer} {em Option criei uma função de logout para deslogar o usuario sempre que ele clica em sair ou trocar conta}
+  - SessionControllerProps {Passei como props a função e o user }
