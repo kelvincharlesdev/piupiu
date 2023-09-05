@@ -28,3 +28,9 @@
     - As respostas NÃO serão paginadas
 
 
+
+
+
+## Configurações de Api
+
+- Configurado post em api quando o usuario entra com senha e email corretamente 

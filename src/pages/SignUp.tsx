@@ -2,15 +2,39 @@ import { useState } from "react";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import { AuthFormLayout } from "../components/AuthFormLayout";
+import { apiRequestSignUp } from "../service/apiRequestSignUp";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../contexts/auth";
 
 export const SignUp = () => {
   const [name, setName] = useState("");
   const [handle, setHandle] = useState("");
   const [password, setPassword] = useState("");
   const [signingUp, setSigningUp] = useState(false);
+  const { isLoading, setIsLoading } = useAuthContext();
+  const navigate = useNavigate();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+      setIsLoading(true);
+
+      const statusApiRequestSignUp = await apiRequestSignUp({
+        name,
+        handle,
+        password,
+      });
+
+      if (statusApiRequestSignUp === 201) {
+        navigate("/");
+      }
+    } catch (error) {
+      //TODO      vALIDAR SE O USUARIO JA TEM CADASTRO
+      console.log(error, "Usúario não cadastrado");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -37,7 +61,7 @@ export const SignUp = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button loading={signingUp} thickness="thick">
+        <Button loading={isLoading} thickness="thick">
           Cadastrar
         </Button>
       </form>
