@@ -26,7 +26,7 @@ export const Login = () => {
       console.log(responsePostLogin);
 
       if (responsePostLogin?.status === 200) {
-        localStorage.setItem("token", JSON.stringify(responsePostLogin?.data.token));
+        localStorage.setItem("token", responsePostLogin?.data.token);
         localStorage.setItem("user", JSON.stringify(responsePostLogin?.data.user));
         setUser(responsePostLogin.data.user)
         setIsAuthenticated(true);
