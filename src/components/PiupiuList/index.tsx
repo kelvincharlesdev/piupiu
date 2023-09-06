@@ -1,8 +1,8 @@
-import { useCallback, useEffect } from "react";
+import { useCallback} from "react";
 import { Piu } from "../../types/Pius";
 import { CircularSpinner } from "../CircularSpinner";
 import Piupiu from "../Piupius";
-import { apiRequestGetList } from "../../service/apiRequestGetList";
+
 
 type PiupiuList = {
   piupius?: Piu[];

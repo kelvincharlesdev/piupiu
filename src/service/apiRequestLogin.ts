@@ -1,4 +1,4 @@
-import { useAuthContext } from "../contexts/auth";
+
 import { IPostLoginTypes } from "../types/IPostLoginTypes";
 import { api } from "./api";
 

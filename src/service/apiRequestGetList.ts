@@ -1,16 +1,6 @@
 import { backendRoutes } from "../routes";
 import { api } from "./api";
 
-interface IPostsPros {
-  id?: string;
-  author: {
-    id: string;
-    handle: string;
-    image_url: string;
-    verified: boolean;
-    description: string;
-  };
-}
 
 
 interface IPagesProsps{

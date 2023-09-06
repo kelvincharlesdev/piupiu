@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NewPiupiu } from "../components/NewPiupiu";
 import { Piu } from "../types/Pius";
 import NavTitle from "../components/NavTitle";
@@ -8,10 +8,11 @@ import { usePagination } from "../hooks/useScroll";
 import { piuComponentHeight } from "../consts";
 import { User } from "../types/Users";
 import { routes } from "../routes";
+import { apiRequestGetList } from "../service/apiRequestGetList";
 
 export const Home = () => {
   const [textValue, setTextValue] = useState("");
-  const [piupius, setPiupius] = useState<Piu[] | undefined>();
+  const [piupius, setPiupius] = useState<Piu[]>([]);
   const [newData, setNewData] = useState<Piu[] | undefined>();
   const [addingPiupiu, setAddingPiupiu] = useState(false);
 
@@ -19,8 +20,14 @@ export const Home = () => {
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const itemsPerPage = Math.ceil(window.screen.height / piuComponentHeight);
 
+  const [isloading , setIsLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+
+
+  
+
   const { scrollTop } = usePagination({
-    onBottomEnter: () => {},
+    onBottomEnter: () => setCurrentPage(currentPage + 1 ),
     onTopEnter: () => {},
     onTopLeave: () => {},
     bottomRef,
@@ -42,6 +49,29 @@ export const Home = () => {
         setAddingPiupiu(false);
       });
   };
+
+  useEffect(() => {
+    const piusData = async () => {
+      try {
+        setIsLoading(true)
+        const response = await apiRequestGetList({page: currentPage, per_page:10});
+
+        const dataPius = response.data;
+
+        setPiupius([...piupius, ...dataPius]);
+
+
+
+      } catch (error) {
+        //TODO   Validar algum erro
+        console.log(error, "Erro dentro do piupiulist");
+      } finally{
+        setIsLoading(false)
+      }
+    };
+
+    piusData();
+  }, [currentPage]);
 
   return (
     <div ref={topRef} className="relative">
@@ -68,10 +98,10 @@ export const Home = () => {
         user={{} as User}
       />
       <PiupiuList
-        initialLoading={true}
+        initialLoading={false}
         topRef={topRef}
         bottomRef={bottomRef}
-        loading={true}
+        loading={isloading}
         piupius={piupius}
         onChange={() => {}}
       />
