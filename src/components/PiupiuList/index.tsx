@@ -42,7 +42,7 @@ export const PiupiuList = ({
         return (
           <Piupiu
             ref={getRef(index)}
-            key={piupiu.id}
+            key={`${piupiu.id}${index}` }
             id={piupiu.id}
             author={piupiu.author}
             onChange={onChange}
