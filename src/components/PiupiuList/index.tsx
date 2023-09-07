@@ -1,7 +1,8 @@
-import { useCallback } from "react";
+import { useCallback} from "react";
 import { Piu } from "../../types/Pius";
 import { CircularSpinner } from "../CircularSpinner";
 import Piupiu from "../Piupius";
+
 
 type PiupiuList = {
   piupius?: Piu[];
@@ -28,6 +29,9 @@ export const PiupiuList = ({
     [bottomRef, piupius, topRef]
   );
 
+
+  
+
   return initialLoading ? (
     <div className="w-full flex items-center h-[50vh] justify-center">
       <CircularSpinner />
@@ -38,7 +42,7 @@ export const PiupiuList = ({
         return (
           <Piupiu
             ref={getRef(index)}
-            key={piupiu.id}
+            key={`${piupiu.id}${index}` }
             id={piupiu.id}
             author={piupiu.author}
             onChange={onChange}

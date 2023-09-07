@@ -34,3 +34,30 @@
 ## Configurações de Api
 
 - Configurado post em api quando o usuario entra com senha e email corretamente 
+
+## Home 
+
+- SideBar :  SessionController {Busquei os dados do usuario tais como img, handle e foto e setei parar aparecer} {em Option criei uma função de logout para deslogar o usuario sempre que ele clica em sair ou trocar conta}
+  - SessionControllerProps {Passei como props a função e o user }
+
+
+- Home/pius
+    - Implementada função apiRequestGetList para pegar os pius no backend usando o token para verificar se o usuario esta autenticado
+    - Implementado useEffect com função piusData para paginar e setar os pius na telas 
+    - Implementado dois estados novos :
+        - [isloading, setIsLoading] para definir o carregamento da pagina
+        - [currentPage, setCurrentPage] define o estado da paginação
+
+
+- Home/piu
+    - Implementada a função na api apiRequestGetPosts para mandar novo piu para o banco de dados 
+    - Em home implementei a função newPiuPiu para chamar a apiRequestGetPosts e limpar o campo de busca apos clicar em piu 
+
+
+- MainLayout
+    - Implementa chamada api de novas pessoas com o arquivo apiRequestGetLatestUsers
+    - Implementa primeira interação com React Query
+    - Implementa função apra buscar os ultimos 3 usuarios cadastrados e is loading com use query dentro de MainLayout
+
+- Home 
+  -Implementei rota de following/stalking em Routes

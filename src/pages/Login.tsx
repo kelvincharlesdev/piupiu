@@ -7,10 +7,10 @@ import { apiRequestLogin } from "../service/apiRequestLogin";
 import { useAuthContext } from "../contexts/auth";
 
 export const Login = () => {
-  const [user, setUser] = useState("");
+  const [handle, setHandle] = useState("");
   const [password, setPassword] = useState("");
   // const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { setIsAuthenticated, isLoading, setIsLoading } = useAuthContext();
+  const { setIsAuthenticated, isLoading, setIsLoading, setUser } = useAuthContext();
   const navigate = useNavigate();
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -19,14 +19,16 @@ export const Login = () => {
     try {
       setIsLoading(true);
       const responsePostLogin = await apiRequestLogin({
-        handle: user,
+        handle,
         password,
       });
 
       console.log(responsePostLogin);
 
       if (responsePostLogin?.status === 200) {
-        localStorage.setItem("userPiu", JSON.stringify(responsePostLogin?.data));
+        localStorage.setItem("token", responsePostLogin?.data.token);
+        localStorage.setItem("user", JSON.stringify(responsePostLogin?.data.user));
+        setUser(responsePostLogin.data.user)
         setIsAuthenticated(true);
         navigate("/home");
       }
@@ -48,8 +50,8 @@ export const Login = () => {
         <h2 className="text-2xl font-bold mb-8">Junte-se aos bons</h2>
         <Input
           placeholder="Handle"
-          value={user}
-          onChange={(e) => setUser(e.target.value)}
+          value={handle}
+          onChange={(e) => setHandle(e.target.value)}
         />
         <Input
           placeholder="Senha"

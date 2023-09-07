@@ -3,6 +3,7 @@ import { User } from "../../types/Users";
 import { Popover } from "../Popover";
 import { ProfilePic } from "../ProfilePic";
 import { Username } from "../Username";
+import { useAuthContext } from "../../contexts/auth";
 
 type SessionControllerProps = {
   user: User;
@@ -16,7 +17,6 @@ export const SessionController = ({
   user,
 }: SessionControllerProps) => {
   const [isActive, setIsActive] = useState(false);
-
   return (
     <button
       onClick={() => setIsActive(!isActive)}
@@ -36,7 +36,7 @@ export const SessionController = ({
         ))}
       </Popover>
 
-      <ProfilePic image={user.image_url} userName={user.name} />
+      <ProfilePic image={user?.image_url} userName={user?.name} />
       <Username
         showVerified={false}
         clickable={false}

@@ -3,8 +3,17 @@ import { SideCard } from "../components/Sidecard";
 import Button from "../components/Button";
 import { SideList } from "../components/SideList";
 import { Outlet } from "react-router-dom";
+import { apiRequestGetLatestUsers } from "../service/apiRequestGetLatestUsers";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export const MainLayout = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["latestUser"],
+    queryFn: async () => await apiRequestGetLatestUsers(),
+    staleTime: 300000,
+  });
+
   return (
     <>
       <SideBar />
@@ -23,7 +32,7 @@ export const MainLayout = () => {
             </Button>
           </div>
         </SideCard>
-        <SideList loading={true} users={[]} />
+        <SideList loading={isLoading} users={data} />
       </div>
     </>
   );
