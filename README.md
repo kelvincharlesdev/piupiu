@@ -58,3 +58,6 @@
     - Implementa chamada api de novas pessoas com o arquivo apiRequestGetLatestUsers
     - Implementa primeira interação com React Query
     - Implementa função apra buscar os ultimos 3 usuarios cadastrados e is loading com use query dentro de MainLayout
+
+- Home 
+  -Implementei rota de following/stalking em Routes
