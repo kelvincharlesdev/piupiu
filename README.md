@@ -47,3 +47,14 @@
     - Implementado dois estados novos :
         - [isloading, setIsLoading] para definir o carregamento da pagina
         - [currentPage, setCurrentPage] define o estado da paginação
+
+
+- Home/piu
+    - Implementada a função na api apiRequestGetPosts para mandar novo piu para o banco de dados 
+    - Em home implementei a função newPiuPiu para chamar a apiRequestGetPosts e limpar o campo de busca apos clicar em piu 
+
+
+- MainLayout
+    - Implementa chamada api de novas pessoas com o arquivo apiRequestGetLatestUsers
+    - Implementa primeira interação com React Query
+    - Implementa função apra buscar os ultimos 3 usuarios cadastrados e is loading com use query dentro de MainLayout
