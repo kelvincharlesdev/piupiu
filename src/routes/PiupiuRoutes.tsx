@@ -5,6 +5,7 @@ import { SignUp } from "../pages/SignUp";
 import { MainLayout } from "../pages/MainLayout";
 import { routes } from ".";
 import { AuthContextProvider, useAuthContext } from "../contexts/auth";
+import { SinglePiupiu } from "../pages/SinglePiupiu";
 
 // const Private = ({item}) => {
 //   const signed = false;
@@ -13,27 +14,30 @@ import { AuthContextProvider, useAuthContext } from "../contexts/auth";
 // }
 
 export const PiupiuRoutes = () => {
-  const { following, home, signup } = routes;
+  const { following, home, signup, login } = routes;
 
   const { isAuthenticated } = useAuthContext();
 
-  
   return (
     <BrowserRouter>
-      
-        <Routes>
-          <Route
-            path="/"
-            element={!isAuthenticated ? <Login /> : <Navigate to={home} />}
-          />
-
-          <Route path={home} element={ isAuthenticated ? <MainLayout /> : <Navigate to='/' /> }>
+      <Routes>
+        {isAuthenticated ? (
+          
+          <Route element={<MainLayout />}>
             <Route path={home} element={<Home />} />
+            <Route path={following} element={<Home />} />
+            <Route path="/*" element={<Navigate replace to={home} />} />
           </Route>
-
-          <Route path={signup} element={<SignUp />} />
-        </Routes>
-    
+        ) : (
+          <>
+            <Route path="/*" element={<Navigate replace to="/" />} />
+            <Route path={login} element={<Login />} />
+            <Route path={signup} element={<SignUp />} />
+          </>
+        )}
+      </Routes>
     </BrowserRouter>
   );
 };
+
+

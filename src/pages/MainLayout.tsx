@@ -11,6 +11,7 @@ export const MainLayout = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["latestUser"],
     queryFn: async () => await apiRequestGetLatestUsers(),
+    staleTime: 300000,
   });
 
   return (
