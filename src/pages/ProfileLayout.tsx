@@ -1,35 +1,77 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavHeader } from "../components/NavHeader";
 import NavTitle from "../components/NavTitle";
 import ProfilePic from "../components/ProfilePic";
 import { Username } from "../components/Username";
 import { User } from "../types/Users";
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { BsFillPencilFill } from "react-icons/bs";
 import { ProfileEditForm } from "../components/ProfileEditForm";
 import { Dialog } from "../components/Dialog";
 import { routes } from "../routes";
+import { apiRequestGetUser } from "../service/apiRequestGetUser";
+import { useQuery } from "@tanstack/react-query";
 
 export const ProfileLayout = () => {
-  const [user, setUser] = useState<User>();
-  const [userPosts, setUserPosts] = useState<number>();
   const [dialogOpen, setDialogOpen] = useState(false);
+
+
+  const { handle } = useParams();
+
+  const { data } = useQuery({
+    queryKey: ["profileUser"],
+    queryFn: async () => await apiRequestGetUser(handle),
+  });
+
+
+
+  
 
   const handleDialogClick = () => {
     setDialogOpen(!dialogOpen);
   };
 
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ["profile"],
+  //   queryFn: async () => await apiRequestGetUser(handle),
+  // });
+
+  // setUserPosts(data.posts);
+  // setUser(data.user);
+
+  // console.log(data.user);
+
+  // const profileResponse = async () =>{
+  //   try {
+  //     setIsLoading(true)
+  //     const response = await apiRequestGetUser(handle)
+  //     setUserPosts(response.posts)
+  //     setUser(response.user)
+  //   } catch (error) {
+  //     console.log('Error dentro do Profile');
+  //   } finally{
+  //     setIsLoading(false)
+  //   }
+
+  // }
+
+  // useEffect(  () => {
+
+  //   profileResponse()
+
+  // },[])
+
   return (
     <>
       <NavHeader
-        title={user?.name || ""}
-        subtitle={`${userPosts || 0} piadas`}
+        title={data?.user.name || ""}
+        subtitle={`${data?.posts || 0} piadas`}
       />
       <NavTitle
         position="relative"
         navOptions={[
-          { title: "Perfil", path: routes.profile(user?.handle) },
-          { title: "Curtidas", path: routes.userLikes(user?.handle) },
+          { title: "Perfil", path: routes.profile(data?.user.handle) },
+          { title: "Curtidas", path: routes.userLikes(data?.user.handle) },
         ]}
       >
         <section className="h-48 w-full bg-zinc-700" />
@@ -39,8 +81,8 @@ export const ProfileLayout = () => {
               <ProfilePic
                 border
                 variant="reallyBig"
-                userName={user?.name || ""}
-                image={user?.image_url}
+                userName={data?.user.name || ""}
+                image={data?.user.image_url}
               />
             </div>
             <div
@@ -51,8 +93,8 @@ export const ProfileLayout = () => {
             </div>
           </div>
           <div>
-            <Username size="xl" variant="column" user={user} />
-            <p className="text-white mt-3 text-sm">{user?.description}</p>
+            <Username size="xl" variant="column" user={data?.user} />
+            <p className="text-white mt-3 text-sm">{data?.user.description}</p>
           </div>
         </section>
       </NavTitle>
@@ -63,7 +105,7 @@ export const ProfileLayout = () => {
         }}
         open={dialogOpen}
       >
-        {user && <ProfileEditForm onSubmit={() => {}} user={user} />}
+        {data?.user && <ProfileEditForm onSubmit={() => {}} user={data?.user} />}
       </Dialog>
     </>
   );

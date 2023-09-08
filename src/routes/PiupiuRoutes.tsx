@@ -3,9 +3,11 @@ import { Login } from "../pages/Login";
 import { Home } from "../pages/Home";
 import { SignUp } from "../pages/SignUp";
 import { MainLayout } from "../pages/MainLayout";
-import { routes } from ".";
+import { backendRoutes, routes } from ".";
 import { AuthContextProvider, useAuthContext } from "../contexts/auth";
 import { SinglePiupiu } from "../pages/SinglePiupiu";
+import { ProfileLayout } from "../pages/ProfileLayout";
+import { Profile } from "../pages/Profile";
 
 // const Private = ({item}) => {
 //   const signed = false;
@@ -14,7 +16,9 @@ import { SinglePiupiu } from "../pages/SinglePiupiu";
 // }
 
 export const PiupiuRoutes = () => {
-  const { following, home, signup, login } = routes;
+  const { following, home, signup, login, userLikes, profile } = routes;
+ 
+
 
   const { isAuthenticated } = useAuthContext();
 
@@ -27,6 +31,12 @@ export const PiupiuRoutes = () => {
             <Route path={home} element={<Home />} />
             <Route path={following} element={<Home />} />
             <Route path="/*" element={<Navigate replace to={home} />} />
+            <Route element={<ProfileLayout />}>
+              <Route path={userLikes()} element={<Profile  postsRoute="likes"/>} />
+              <Route path={profile()} element={<Profile  postsRoute="posts" />} />
+            </Route>
+
+
           </Route>
         ) : (
           <>

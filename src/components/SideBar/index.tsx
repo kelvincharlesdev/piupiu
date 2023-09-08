@@ -9,7 +9,7 @@ import NewPiupiu from "../NewPiupiu";
 import { useState } from "react";
 import axios from "axios";
 import { User } from "../../types/Users";
-import { backendRoutes } from "../../routes";
+import { backendRoutes, routes } from "../../routes";
 import { useAuthContext } from "../../contexts/auth";
 import { Username } from "../Username";
 export const SideBar = () => {
@@ -57,7 +57,7 @@ export const SideBar = () => {
               </li>
             </NavLink>
             <NavLink
-              to={backendRoutes.profile()}
+              to={routes.profile(user?.handle)}
               className={({ isActive }) => (isActive ? "font-bold" : "")}
             >
               <li className="flex mb-4 p-3 pr-8 w-min cursor-pointer  rounded-full hover:bg-zinc-900 items-center gap-4">

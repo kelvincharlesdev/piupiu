@@ -93,8 +93,6 @@ export const Home = () => {
 
       setPiupius([...piupius, ...dataPius]);
 
-
-
     } catch (error) {
       //TODO   Validar algum erro
       console.log(error, "Erro dentro do piupiulist");

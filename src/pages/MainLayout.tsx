@@ -4,7 +4,6 @@ import Button from "../components/Button";
 import { SideList } from "../components/SideList";
 import { Outlet } from "react-router-dom";
 import { apiRequestGetLatestUsers } from "../service/apiRequestGetLatestUsers";
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 export const MainLayout = () => {
