@@ -23,7 +23,7 @@ export const apiRequestGetUser = async ( handle : string | undefined ) => {
     }
   };
   
-  export const apiRequestGetUserPosts = async ( {handle, postsRoute} : IPostsLikes ) => {
+  export const apiRequestGetUserPostsLikes = async ( {handle, postsRoute} : IPostsLikes ) => {
     const tokenUser = localStorage.getItem("token")
     try {
   

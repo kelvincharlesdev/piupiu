@@ -61,3 +61,12 @@
 
 - Home 
   -Implementei rota de following/stalking em Routes
+
+
+- Profile 
+  - Implementa routas de profile
+  - Implementa funções de requisição de api 
+      - apiRequestGetUser (função para rota de profile)
+      - apiRequestGetUserPostsLikes (função para alternar entre rotas de posts ou profile)
+  - Implementa useQuery para buscar informações de profile
+  - Implementa useQuery para buscar informações de Posts e Likes e alternar as rotas entre eles 
