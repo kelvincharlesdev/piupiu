@@ -36,7 +36,7 @@ export const PiupiuRoutes = () => {
               <Route path={profile()} element={<Profile  postsRoute="posts" />} />
             </Route>
 
-
+          
           </Route>
         ) : (
           <>

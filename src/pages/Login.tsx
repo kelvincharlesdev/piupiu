@@ -23,8 +23,6 @@ export const Login = () => {
         password,
       });
 
-      console.log(responsePostLogin);
-
       if (responsePostLogin?.status === 200) {
         localStorage.setItem("token", responsePostLogin?.data.token);
         localStorage.setItem("user", JSON.stringify(responsePostLogin?.data.user));

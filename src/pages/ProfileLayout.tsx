@@ -9,57 +9,44 @@ import { BsFillPencilFill } from "react-icons/bs";
 import { ProfileEditForm } from "../components/ProfileEditForm";
 import { Dialog } from "../components/Dialog";
 import { routes } from "../routes";
-import { apiRequestGetUser } from "../service/apiRequestGetUser";
+import {
+  apiRequestGetUser,
+  apiRequestPatchUser,
+} from "../service/apiRequestUserProfile";
 import { useQuery } from "@tanstack/react-query";
+import { BiSolidSad } from "react-icons/bi";
+import { useAuthContext } from "../contexts/auth";
 
 export const ProfileLayout = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
-
+  const { setUser, user } = useAuthContext();
 
   const { handle } = useParams();
 
-  const { data } = useQuery({
-    queryKey: ["profileUser"],
+  const { data, refetch } = useQuery({
+    queryKey: ["profileUser", handle],
     queryFn: async () => await apiRequestGetUser(handle),
   });
 
-
-
+ 
   
+  
+  const patchUser = async (users: Partial<User>) => {
+    try {
+      await apiRequestPatchUser({ handle, users });
+      const dataUser = Object.assign(data?.user, users);
+      localStorage.setItem("user", JSON.stringify(dataUser));
+      setUser(dataUser);
+      refetch();
+      setDialogOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleDialogClick = () => {
     setDialogOpen(!dialogOpen);
   };
-
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["profile"],
-  //   queryFn: async () => await apiRequestGetUser(handle),
-  // });
-
-  // setUserPosts(data.posts);
-  // setUser(data.user);
-
-  // console.log(data.user);
-
-  // const profileResponse = async () =>{
-  //   try {
-  //     setIsLoading(true)
-  //     const response = await apiRequestGetUser(handle)
-  //     setUserPosts(response.posts)
-  //     setUser(response.user)
-  //   } catch (error) {
-  //     console.log('Error dentro do Profile');
-  //   } finally{
-  //     setIsLoading(false)
-  //   }
-
-  // }
-
-  // useEffect(  () => {
-
-  //   profileResponse()
-
-  // },[])
 
   return (
     <>
@@ -85,12 +72,15 @@ export const ProfileLayout = () => {
                 image={data?.user.image_url}
               />
             </div>
-            <div
-              onClick={handleDialogClick}
-              className="absolute cursor-pointer rounded-full bg-zinc-950 hover:bg-zinc-900 p-6 right-4 top-4"
-            >
-              <BsFillPencilFill />
-            </div>
+           
+            {data?.user.handle === user?.handle && (
+              <div
+                onClick={handleDialogClick}
+                className="absolute cursor-pointer rounded-full bg-zinc-950 hover:bg-zinc-900 p-6 right-4 top-4"
+              >
+                <BsFillPencilFill />
+              </div>
+            )}
           </div>
           <div>
             <Username size="xl" variant="column" user={data?.user} />
@@ -105,7 +95,9 @@ export const ProfileLayout = () => {
         }}
         open={dialogOpen}
       >
-        {data?.user && <ProfileEditForm onSubmit={() => {}} user={data?.user} />}
+        {data?.user && (
+          <ProfileEditForm onSubmit={patchUser} user={data?.user} />
+        )}
       </Dialog>
     </>
   );
