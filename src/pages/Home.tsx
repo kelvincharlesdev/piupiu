@@ -61,6 +61,7 @@ export const Home = () => {
     try {
       setAddingPiupiu(true);
       const response = await apiRequestPostPosts(formValue);
+      setPiupius([response , ...piupius]);
       setTextValue("");
     } catch (error) {
       console.log("Error dentro do newPIUPIU");
