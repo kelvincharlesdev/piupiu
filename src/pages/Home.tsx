@@ -10,7 +10,11 @@ import { User } from "../types/Users";
 import { routes } from "../routes";
 import { apiRequestGetList } from "../service/apiRequestGetList";
 import { useAuthContext } from "../contexts/auth";
-import { apiRequestGetPosts } from "../service/apiRequestGetPosts";
+import {
+  apiRequestGetPosts,
+  apiRequestPostPosts,
+} from "../service/apiRequestGetPosts";
+import { useQuery } from "@tanstack/react-query";
 
 export const Home = () => {
   const [textValue, setTextValue] = useState("");
@@ -22,13 +26,13 @@ export const Home = () => {
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const itemsPerPage = Math.ceil(window.screen.height / piuComponentHeight);
 
-  const [isloading , setIsLoading] = useState(true)
-  const [currentPage, setCurrentPage] = useState(1)
+  const [isloading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const { scrollTop } = usePagination({
-    onBottomEnter: () => setCurrentPage(currentPage + 1 ),
+    onBottomEnter: () => setCurrentPage(currentPage + 1),
     onTopEnter: () => {},
     onTopLeave: () => {},
     bottomRef,
@@ -50,56 +54,38 @@ export const Home = () => {
     //     setAddingPiupiu(false);
     //   });
 
-   
-
-    await newPiuPiu(formValue)
-
-
-
+    await newPiuPiu(formValue);
   };
 
-
-  const newPiuPiu = async (formValue : string) => {
-
+  const newPiuPiu = async (formValue: string) => {
     try {
-      setAddingPiupiu(true)
-      await apiRequestGetPosts(formValue)
-      setTextValue("")
-
-      // TODO Fazer logica para passar o novo piu para lista com REACT QUERY
-
-      
-      // console.log('Dentro de newPiupiu',response );
-      
+      setAddingPiupiu(true);
+      const response = await apiRequestPostPosts(formValue);
+      setTextValue("");
     } catch (error) {
-      console.log('Error dentro do newPIUPIU');
-      setAddingPiupiu(false)
-      
-    } finally{
+      console.log("Error dentro do newPIUPIU");
+      setAddingPiupiu(false);
+    } finally {
       setAddingPiupiu(false);
     }
-
-    
-
-  }
-
+  };
 
   const piusData = async () => {
     try {
-      setIsLoading(true)
-      const response = await apiRequestGetList({page: currentPage, per_page:10});
+      setIsLoading(true);
+      const response = await apiRequestGetList({
+        page: currentPage,
+        per_page: 10,
+      });
 
       const dataPius = response.data;
 
       setPiupius([...piupius, ...dataPius]);
-
-
-
     } catch (error) {
       //TODO   Validar algum erro
       console.log(error, "Erro dentro do piupiulist");
-    } finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   };
 

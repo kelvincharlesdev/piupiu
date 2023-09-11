@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import Input from "../Input";
 import ProfilePic from "../ProfilePic";
 import { User } from "../../types/Users";
 import Button from "../Button";
 import { Textarea } from "../Textarea";
+import { useQuery } from "@tanstack/react-query";
+import { apiRequestPutUser } from "../../service/apiRequestUserProfile";
+import { useParams } from "react-router-dom";
+import { AuthContext, useAuthContext } from "../../contexts/auth";
+
 
 type ProfileEditFormProps = {
   onSubmit?: (user: Partial<User>) => void;
@@ -11,10 +16,10 @@ type ProfileEditFormProps = {
 };
 
 export const ProfileEditForm = ({ onSubmit, user }: ProfileEditFormProps) => {
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState(user?.image_url);
   const [description, setDescription] = useState(user.description || "");
   const [name, setName] = useState(user.name);
-
+ 
   const handleOnSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const userData: Partial<User> = {
@@ -22,8 +27,24 @@ export const ProfileEditForm = ({ onSubmit, user }: ProfileEditFormProps) => {
       image_url: imageUrl,
       name,
     };
+   
     onSubmit?.(userData);
   };
+
+  // const { data: editProfile } = useQuery({
+  //   queryKey: ["profileEditData"],
+  //   queryFn: async () =>
+  //     await apiRequestPutUser({
+  //       description,
+  //       handle,
+  //       image_url: imageUrl,
+  //       name,
+  //     }),
+  // });
+
+
+  
+  
 
   return (
     <>
@@ -34,11 +55,11 @@ export const ProfileEditForm = ({ onSubmit, user }: ProfileEditFormProps) => {
         <ProfilePic
           variant="reallyBig"
           userName=""
-          image={imageUrl || user.image_url}
+          image={imageUrl || user?.image_url}
         />
         <Input
           placeholder="Link da imagem"
-          value={imageUrl}
+          value={imageUrl || user?.image_url}
           onChange={(e) => setImageUrl(e.target.value)}
         />
         <Input
@@ -49,7 +70,7 @@ export const ProfileEditForm = ({ onSubmit, user }: ProfileEditFormProps) => {
         />
         <Textarea
           variant="styled"
-          value={description}
+          value={description || user?.description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Descrição"
         />

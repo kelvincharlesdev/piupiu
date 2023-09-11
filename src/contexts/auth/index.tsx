@@ -1,20 +1,20 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "../../types/Users";
 
-import '../../types/Users'
-
+import "../../types/Users";
+import { apiRequestGetLogin } from "../../service/apiRequestLogin";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { apiRequestGetUser } from "../../service/apiRequestUserProfile";
 
 interface IAuthLogin {
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
-  user?: User
-  setUser: (user: User) => void
+  user?: User;
+  setUser: (user: User) => void;
 }
-
-
-
 
 export const AuthContext = createContext({} as IAuthLogin);
 
@@ -29,24 +29,29 @@ export const AuthContextProvider = ({
 
   useEffect(() => {
     const tokenUser = localStorage.getItem("token");
-    const userData = localStorage.getItem('user')
-   
+    const userData = localStorage.getItem("user");
+
     if (tokenUser) {
       setIsAuthenticated(true);
-      
     } else {
       setIsAuthenticated(false);
     }
 
-    if(userData) {
-      setUser(JSON.parse(userData))
+    if (userData) {
+      setUser(JSON.parse(userData));
     }
-    
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, isLoading, setIsLoading , user, setUser }}
+      value={{
+        isAuthenticated,
+        setIsAuthenticated,
+        isLoading,
+        setIsLoading,
+        user,
+        setUser,
+      }}
     >
       {children}
     </AuthContext.Provider>
@@ -57,7 +62,7 @@ export const useAuthContext = () => {
   const context = useContext(AuthContext);
 
   if (context === undefined) {
-    throw new Error("Fora do AuhtProvider");
+    throw new Error("Fora do AuthProvider");
   }
 
   return context;

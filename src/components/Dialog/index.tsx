@@ -24,6 +24,8 @@ export const Dialog = ({ open, onClose, children }: DialogProps) => {
     };
   }, [open]);
 
+  
+
   return (
     open && (
       <dialog
