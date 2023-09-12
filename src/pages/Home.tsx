@@ -11,7 +11,6 @@ import { routes } from "../routes";
 import { apiRequestGetList } from "../service/apiRequestList";
 import { useAuthContext } from "../contexts/auth";
 import {
-  apiRequestGetPosts,
   apiRequestPostPosts,
 } from "../service/apiRequestGetPosts";
 import { useInfiniteQuery } from "@tanstack/react-query";

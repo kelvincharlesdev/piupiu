@@ -38,7 +38,10 @@ export const SinglePiupiu = () => {
       const response = await apiRequestPostReplies(id as string);
       setReplies(response.replies);
       return response;
-    } catch (error) {}
+    } catch (error) {
+      console.log('Erro dentro da função getReplies, apiRequestPostReplies', error);
+      
+    }
   }, []);
 
   const handleSubmit = async (e: React.FormEvent, replyText?: string) => {
