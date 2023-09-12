@@ -8,7 +8,7 @@ import { usePagination } from "../hooks/useScroll";
 import { piuComponentHeight } from "../consts";
 import { User } from "../types/Users";
 import { routes } from "../routes";
-import { apiRequestGetList } from "../service/apiRequestGetList";
+import { apiRequestGetList } from "../service/apiRequestList";
 import { useAuthContext } from "../contexts/auth";
 import {
   apiRequestGetPosts,
