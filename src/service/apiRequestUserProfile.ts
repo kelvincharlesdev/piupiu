@@ -1,16 +1,7 @@
 import { FaAudioDescription } from "react-icons/fa";
 import { api } from "./api";
-import { User } from "../types/Users";
-
-interface IPostsLikes {
-  handle: string | undefined;
-  postsRoute: string;
-}
-
-interface IEditProfile {
-  handle: string | undefined;
-  users: Partial<User>;
-}
+import { IPostsLikes } from "../types/IPostsLikes";
+import { IEditProfile } from "../types/IEditProfile";
 
 export const apiRequestGetUser = async (handle: string | undefined) => {
   const tokenUser = localStorage.getItem("token");

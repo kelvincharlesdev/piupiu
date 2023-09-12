@@ -31,21 +31,6 @@ export const ProfileEditForm = ({ onSubmit, user }: ProfileEditFormProps) => {
     onSubmit?.(userData);
   };
 
-  // const { data: editProfile } = useQuery({
-  //   queryKey: ["profileEditData"],
-  //   queryFn: async () =>
-  //     await apiRequestPutUser({
-  //       description,
-  //       handle,
-  //       image_url: imageUrl,
-  //       name,
-  //     }),
-  // });
-
-
-  
-  
-
   return (
     <>
       <form

@@ -1,10 +1,5 @@
+import { IApiRequestSignUp } from "../types/IApiRequestSignUp";
 import { api } from "./api";
-
-export interface IApiRequestSignUp {
-  name: string;
-  handle: string;
-  password: string;
-}
 
 export const apiRequestSignUp = async ({
   handle,
@@ -13,17 +8,15 @@ export const apiRequestSignUp = async ({
 }: IApiRequestSignUp) => {
   try {
     const response = await api.post("/signup", {
-        handle,
-        name,
-        password
+      handle,
+      name,
+      password,
     });
 
-    const {status} = response
-    
+    const { status } = response;
 
-   return status
-    
+    return status;
   } catch (error) {
     console.log(error, "Usuario não cadastrado");
-      }
+  }
 };

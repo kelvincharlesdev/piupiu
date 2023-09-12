@@ -1,10 +1,18 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CompletePiupiu } from "../components/CompletePiupiu";
 import { NavHeader } from "../components/NavHeader";
 import { Piu } from "../types/Pius";
 import NewPiupiu from "../components/NewPiupiu";
 import { PiupiuList } from "../components/PiupiuList";
 import { User } from "../types/Users";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import {
+  apiRequestPostId,
+  apiRequestPostReplies,
+  apiRequestPostReply,
+} from "../service/apiRequestList";
+import { useAuthContext } from "../contexts/auth";
 
 export const SinglePiupiu = () => {
   const [replies, setReplies] = useState<Piu[]>();
@@ -12,14 +20,42 @@ export const SinglePiupiu = () => {
   const [post, setPost] = useState<Piu>();
   const [userReply, setuserReply] = useState("");
   const [replying, setReplying] = useState(false);
+  const { id } = useParams();
+  const { user } = useAuthContext();
 
-  const getReplies = useCallback(async () => {}, []);
+  const { data } = useQuery({
+    queryKey: ["SinglePiu"],
+    queryFn: async () => await apiRequestPostId(id as string),
+  });
+
+  useEffect(() => {
+    getReplies();
+    setPost(data);
+  }, [userReply]);
+
+  const getReplies = useCallback(async () => {
+    try {
+      const response = await apiRequestPostReplies(id as string);
+      setReplies(response.replies);
+      return response;
+    } catch (error) {
+      console.log('Erro dentro da função getReplies, apiRequestPostReplies', error);
+      
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent, replyText?: string) => {
     console.log(e, replyText);
 
-    
-
+    try {
+      setReplying(true);
+      await apiRequestPostReply(id as string, replyText as string);
+      setuserReply("");
+    } catch (error) {
+      console.log("Erro dentro de handleLike -  apiRequestPostReply", error);
+    } finally {
+      setReplying(false);
+    }
   };
 
   const handleLike = useCallback(async () => {}, []);
@@ -28,20 +64,20 @@ export const SinglePiupiu = () => {
     <>
       <NavHeader title="Post" />
       <CompletePiupiu
-        author={post?.author}
-        body={post?.message || ""}
+        author={data?.author}
+        body={data?.message || ""}
         reactions={{
           reactions: {
             comment: {
               active: false,
-              total: post?.replies?.total,
+              total: data?.replies?.total,
             },
             repiu: {
               active: false,
               total: 0,
             },
             like: {
-              total: post?.likes?.total,
+              total: data?.likes?.total,
               active: liked,
               onClick: handleLike,
             },
@@ -51,7 +87,7 @@ export const SinglePiupiu = () => {
       <NewPiupiu
         onChange={(e) => setuserReply(e.target.value)}
         onSubmit={handleSubmit}
-        user={{} as User}
+        user={user as User}
         variant="reply"
         value={userReply}
         loading={replying}

@@ -1,5 +1,4 @@
-
 export interface IPostLoginTypes {
-    handle: string;
-    password: string;
+  handle: string;
+  password: string;
 }

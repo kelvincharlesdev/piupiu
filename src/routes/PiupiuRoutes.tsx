@@ -16,9 +16,8 @@ import { Profile } from "../pages/Profile";
 // }
 
 export const PiupiuRoutes = () => {
-  const { following, home, signup, login, userLikes, profile } = routes;
- 
-
+  const { following, home, signup, login, userLikes, profile, singlePiupiu } =
+    routes;
 
   const { isAuthenticated } = useAuthContext();
 
@@ -26,17 +25,23 @@ export const PiupiuRoutes = () => {
     <BrowserRouter>
       <Routes>
         {isAuthenticated ? (
-          
           <Route element={<MainLayout />}>
             <Route path={home} element={<Home />} />
             <Route path={following} element={<Home />} />
-            <Route path="/*" element={<Navigate replace to={home} />} />
+            <Route path={singlePiupiu()} element={<SinglePiupiu />} />
             <Route element={<ProfileLayout />}>
-              <Route path={userLikes()} element={<Profile  postsRoute="likes"/>} />
-              <Route path={profile()} element={<Profile  postsRoute="posts" />} />
+              <Route
+                path={userLikes()}
+                element={<Profile postsRoute="likes" />}
+              />
+              <Route
+                path={profile()}
+                element={<Profile postsRoute="posts" />}
+              />
+              R
             </Route>
 
-          
+            <Route path="/*" element={<Navigate replace to={home} />} />
           </Route>
         ) : (
           <>
@@ -49,5 +54,3 @@ export const PiupiuRoutes = () => {
     </BrowserRouter>
   );
 };
-
-

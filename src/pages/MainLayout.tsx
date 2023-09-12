@@ -6,7 +6,9 @@ import { Outlet } from "react-router-dom";
 import { apiRequestGetLatestUsers } from "../service/apiRequestGetLatestUsers";
 import { useQuery } from "@tanstack/react-query";
 
+
 export const MainLayout = () => {
+
   const { data, isLoading } = useQuery({
     queryKey: ["latestUser"],
     queryFn: async () => await apiRequestGetLatestUsers(),

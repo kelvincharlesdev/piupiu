@@ -14,7 +14,6 @@ import {
   apiRequestPatchUser,
 } from "../service/apiRequestUserProfile";
 import { useQuery } from "@tanstack/react-query";
-import { BiSolidSad } from "react-icons/bi";
 import { useAuthContext } from "../contexts/auth";
 
 export const ProfileLayout = () => {
@@ -28,9 +27,6 @@ export const ProfileLayout = () => {
     queryFn: async () => await apiRequestGetUser(handle),
   });
 
- 
-  
-  
   const patchUser = async (users: Partial<User>) => {
     try {
       await apiRequestPatchUser({ handle, users });
@@ -72,7 +68,7 @@ export const ProfileLayout = () => {
                 image={data?.user.image_url}
               />
             </div>
-           
+
             {data?.user.handle === user?.handle && (
               <div
                 onClick={handleDialogClick}
