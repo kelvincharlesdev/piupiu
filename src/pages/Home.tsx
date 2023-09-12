@@ -14,7 +14,7 @@ import {
   apiRequestGetPosts,
   apiRequestPostPosts,
 } from "../service/apiRequestGetPosts";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 export const Home = () => {
   const [textValue, setTextValue] = useState("");
@@ -26,34 +26,55 @@ export const Home = () => {
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const itemsPerPage = Math.ceil(window.screen.height / piuComponentHeight);
 
-  const [isloading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-
   const { user } = useAuthContext();
 
   const { scrollTop } = usePagination({
-    onBottomEnter: () => setCurrentPage(currentPage + 1),
-    onTopEnter: () => {},
+    onBottomEnter: () => {
+      hasNextPage && fetchNextPage();
+    },
+    onTopEnter: () => {
+      setNewData([]);
+    },
     onTopLeave: () => {},
     bottomRef,
     topRef,
     refreshVariable: piupius,
   });
 
+  const { fetchNextPage, hasNextPage, isLoading, isFetching } =
+    useInfiniteQuery(
+      ["piu"],
+      (params) => {
+        return apiRequestGetList({
+          page: params.pageParam ? params.pageParam : 1,
+          per_page: itemsPerPage,
+        });
+      },
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          const totalPages = allPages[0].totalPages;
+          return lastPage.currentPage < totalPages
+            ? lastPage.currentPage + 1
+            : undefined;
+        },
+        onSuccess: (response) =>
+          setPiupius(response?.pages.flatMap((page) => page.data)),
+        refetchInterval: 20000,
+        structuralSharing(oldData, newData) {
+          if (oldData?.pages) {
+            if (oldData.pages[0] !== newData.pages[0]) {
+              const diferença =
+                newData.pages[0].totalPius - oldData?.pages[0].totalPius;
+              setNewData(newData.pages[0].data.slice(0, diferença));
+            }
+          }
+          return newData;
+        },
+      }
+    );
+
   const handleSubmit = async (e: React.FormEvent, formValue: string) => {
     e.preventDefault();
-    setAddingPiupiu(true);
-    // axios
-    //   .post("/posts", {
-    //     message: formValue,
-    //   })
-    //   .then(() => {
-    //     setTextValue("");
-    //   })
-    //   .finally(() => {
-    //     setAddingPiupiu(false);
-    //   });
-
     await newPiuPiu(formValue);
   };
 
@@ -61,38 +82,15 @@ export const Home = () => {
     try {
       setAddingPiupiu(true);
       const response = await apiRequestPostPosts(formValue);
-      setPiupius([response , ...piupius]);
+      setPiupius([response, ...piupius]);
       setTextValue("");
     } catch (error) {
-      console.log("Error dentro do newPIUPIU");
+      console.log("Error dentro do newPiupiu");
       setAddingPiupiu(false);
     } finally {
       setAddingPiupiu(false);
     }
   };
-
-  const piusData = async () => {
-    try {
-      setIsLoading(true);
-      const response = await apiRequestGetList({
-        page: currentPage,
-        per_page: 10,
-      });
-
-      const dataPius = response.data;
-
-      setPiupius([...piupius, ...dataPius]);
-    } catch (error) {
-      //TODO   Validar algum erro
-      console.log(error, "Erro dentro do piupiulist");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    piusData();
-  }, [currentPage]);
 
   return (
     <div ref={topRef} className="relative">
@@ -119,10 +117,10 @@ export const Home = () => {
         user={user as User}
       />
       <PiupiuList
-        initialLoading={false}
+        initialLoading={isLoading}
         topRef={topRef}
         bottomRef={bottomRef}
-        loading={isloading}
+        loading={isFetching}
         piupius={piupius}
         onChange={() => {}}
       />

@@ -10,7 +10,6 @@ export const SignUp = () => {
   const [name, setName] = useState("");
   const [handle, setHandle] = useState("");
   const [password, setPassword] = useState("");
-  const [signingUp, setSigningUp] = useState(false);
   const { isLoading, setIsLoading } = useAuthContext();
   const navigate = useNavigate();
 
@@ -30,8 +29,7 @@ export const SignUp = () => {
         navigate("/");
       }
     } catch (error) {
-      //TODO      vALIDAR SE O USUARIO JA TEM CADASTRO
-      console.log(error, "Usúario não cadastrado");
+      console.log(error, "Usuário não cadastrado");
     } finally {
       setIsLoading(false);
     }

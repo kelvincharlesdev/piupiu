@@ -1,10 +1,8 @@
-import { backendRoutes } from "../routes"
-import { api } from "./api"
+import { backendRoutes } from "../routes";
+import { api } from "./api";
 
-
-
-export const apiRequestGetLatestUsers =  async() =>{
-    const { latestUsers } = backendRoutes
+export const apiRequestGetLatestUsers = async () => {
+  const { latestUsers } = backendRoutes;
 
   try {
     const tokenUser = localStorage.getItem("token");
@@ -19,5 +17,4 @@ export const apiRequestGetLatestUsers =  async() =>{
   } catch (error) {
     console.error("Erro ao buscar pius", error);
   }
-
-}
+};

@@ -12,26 +12,37 @@ import { User } from "../../types/Users";
 import { backendRoutes, routes } from "../../routes";
 import { useAuthContext } from "../../contexts/auth";
 import { Username } from "../Username";
+import { apiRequestPostPosts } from "../../service/apiRequestGetPosts";
+import { Piu } from "../../types/Pius";
+import queryClient from "../../service/queryClient";
 export const SideBar = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [addingPiupiu, setAddingPiupiu] = useState(false);
   const [textValue, setTextValue] = useState("");
   const {user, setIsAuthenticated } = useAuthContext();
+ const piuSideBar = queryClient
+
+  const newPiuPiu = async (formValue: string) => {
+    try {
+      setAddingPiupiu(true);
+     await apiRequestPostPosts(formValue);
+     
+      setTextValue("");
+      
+      setOpenDialog(false)
+    } catch (error) {
+      console.log("Error dentro do newPIUPIU");
+      setAddingPiupiu(false);
+    } finally {
+      piuSideBar.invalidateQueries(['piu'])
+      setAddingPiupiu(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent, formValue?: string) => {
     e.preventDefault();
-    setAddingPiupiu(true);
-    axios
-      .post("/posts", {
-        message: formValue,
-      })
-      .then(() => {
-        setTextValue("");
-      })
-      .finally(() => {
-        setAddingPiupiu(false);
-        setOpenDialog(false);
-      });
+    newPiuPiu(formValue as string)
+
   };
 
 
@@ -100,7 +111,7 @@ export const SideBar = () => {
             loading={addingPiupiu}
             onSubmit={handleSubmit}
             variant="borderless"
-            user={{} as User}
+            user={user as User}
           />
         </div>
       </Dialog>

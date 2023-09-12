@@ -12,6 +12,7 @@ import {
   apiRequestPostReplies,
   apiRequestPostReply,
 } from "../service/apiRequestList";
+import { useAuthContext } from "../contexts/auth";
 
 export const SinglePiupiu = () => {
   const [replies, setReplies] = useState<Piu[]>();
@@ -20,6 +21,7 @@ export const SinglePiupiu = () => {
   const [userReply, setuserReply] = useState("");
   const [replying, setReplying] = useState(false);
   const { id } = useParams();
+  const { user } = useAuthContext();
 
   const { data } = useQuery({
     queryKey: ["SinglePiu"],
@@ -28,14 +30,12 @@ export const SinglePiupiu = () => {
 
   useEffect(() => {
     getReplies();
-  }, []);
+    setPost(data);
+  }, [userReply]);
 
   const getReplies = useCallback(async () => {
     try {
       const response = await apiRequestPostReplies(id as string);
-
-      console.log(response.replies);
-
       setReplies(response.replies);
       return response;
     } catch (error) {}
@@ -43,6 +43,16 @@ export const SinglePiupiu = () => {
 
   const handleSubmit = async (e: React.FormEvent, replyText?: string) => {
     console.log(e, replyText);
+
+    try {
+      setReplying(true);
+      await apiRequestPostReply(id as string, replyText as string);
+      setuserReply("");
+    } catch (error) {
+      console.log("Erro dentro de handleLike -  apiRequestPostReply", error);
+    } finally {
+      setReplying(false);
+    }
   };
 
   const handleLike = useCallback(async () => {}, []);
@@ -74,7 +84,7 @@ export const SinglePiupiu = () => {
       <NewPiupiu
         onChange={(e) => setuserReply(e.target.value)}
         onSubmit={handleSubmit}
-        user={{} as User}
+        user={user as User}
         variant="reply"
         value={userReply}
         loading={replying}

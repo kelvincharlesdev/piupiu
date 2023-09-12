@@ -9,13 +9,13 @@ type ProfileProps = {
 };
 export const Profile = ({ postsRoute }: ProfileProps) => {
   const { handle } = useParams();
-  const {user} = useAuthContext()
-  const { data, isLoading} = useQuery({
-    queryKey: ["posts", postsRoute , user, handle],
-    queryFn: async () => await apiRequestGetUserPostsLikes({handle, postsRoute}),
-
+  const { user } = useAuthContext();
+  const { data, isLoading } = useQuery({
+    queryKey: ["posts", postsRoute, user, handle],
+    queryFn: async () =>
+      await apiRequestGetUserPostsLikes({ handle, postsRoute }),
   });
-  
+
   return (
     <>
       <main>

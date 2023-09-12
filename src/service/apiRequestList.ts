@@ -1,15 +1,8 @@
 import { backendRoutes } from "../routes";
+import { IPagesProsps } from "../types/IPagesProsps";
 import { api } from "./api";
 
-
-
-interface IPagesProsps{
-    page: number;
-    per_page: number;
-
-}
-
-export const apiRequestGetList = async ({page, per_page} : IPagesProsps) => {
+export const apiRequestGetList = async ({ page, per_page }: IPagesProsps) => {
   const { pius } = backendRoutes;
   try {
     const tokenUser = localStorage.getItem("token");
@@ -30,9 +23,7 @@ export const apiRequestGetList = async ({page, per_page} : IPagesProsps) => {
   }
 };
 
-
 export const apiRequestPostId = async (postId: string) => {
-
   try {
     const tokenUser = localStorage.getItem("token");
 
@@ -40,18 +31,15 @@ export const apiRequestPostId = async (postId: string) => {
       headers: {
         Authorization: `Bearer ${tokenUser}`,
       },
-    })
+    });
 
-    return response.data
+    return response.data;
   } catch (error) {
-    console.log('Erro dentro de apiRequestPostId', error);
-    
+    console.log("Erro dentro de apiRequestPostId", error);
   }
-
-}
+};
 
 export const apiRequestPostReplies = async (postId: string) => {
-
   try {
     const tokenUser = localStorage.getItem("token");
 
@@ -59,12 +47,30 @@ export const apiRequestPostReplies = async (postId: string) => {
       headers: {
         Authorization: `Bearer ${tokenUser}`,
       },
-    })
+    });
 
-    return response.data
+    return response.data;
   } catch (error) {
-    console.log('Erro dentro de apiRequestPostId', error);
-    
+    console.log("Erro dentro de apiRequestPostReplies", error);
   }
+};
 
-}
+export const apiRequestPostReply = async (postId: string, message: string) => {
+  try {
+    const tokenUser = localStorage.getItem("token");
+
+    const response = await api.post(
+      `/posts/${postId}/reply`,
+      { message },
+      {
+        headers: {
+          Authorization: `Bearer ${tokenUser}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log("Erro dentro de apiRequestPostReply", error);
+  }
+};

@@ -9,7 +9,6 @@ import { useAuthContext } from "../contexts/auth";
 export const Login = () => {
   const [handle, setHandle] = useState("");
   const [password, setPassword] = useState("");
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setIsAuthenticated, isLoading, setIsLoading, setUser } = useAuthContext();
   const navigate = useNavigate();
 

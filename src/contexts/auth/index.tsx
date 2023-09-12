@@ -2,19 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "../../types/Users";
 
 import "../../types/Users";
-import { apiRequestGetLogin } from "../../service/apiRequestLogin";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { apiRequestGetUser } from "../../service/apiRequestUserProfile";
-
-interface IAuthLogin {
-  isAuthenticated: boolean;
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
-  isLoading: boolean;
-  setIsLoading: (isLoading: boolean) => void;
-  user?: User;
-  setUser: (user: User) => void;
-}
+import { IAuthLogin } from "../../types/IAuthLogin";
 
 export const AuthContext = createContext({} as IAuthLogin);
 
